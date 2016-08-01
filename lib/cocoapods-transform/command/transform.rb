@@ -31,9 +31,6 @@ module Pod
 
       def run
         path = podfile_path
-        if !path
-          help! 'Make sure a Podfile at current directory!'
-        end
         pods = parse_Podfile(path)
         transform(path, pods)
       end
@@ -43,6 +40,7 @@ module Pod
         if File.exist?(podfile_path)
           return podfile_path
         else
+          help! 'Make sure a Podfile at current directory!'
           return
         end
       end
@@ -51,8 +49,8 @@ module Pod
         active_pods = Array.new
         inactive_pods = Array.new
         File.open(podfile_path, 'r') do |f|
-          active_pod_reg = /^[\t ]*pod *'(\w+)'[\n\r,]/
-          inactive_pod_reg = /^[\t ]*#[\t ]*pod *'(\w+)'[\n\r,]/
+          active_pod_reg = /^[\t ]*pod *('\w+')[\n\r,]/
+          inactive_pod_reg = /^[\t ]*#[\t ]*pod *('\w+')[\n\r,]/
           f.each_line do |line|
             if inactive_pod_reg.match(line)
               inactive_pods.push($1)
@@ -66,11 +64,15 @@ module Pod
       end
 
       def transform(podfile_path, pods)
+        if pods.length == 0
+          help! 'Podfile no valid pod to transform!'
+          return
+        end
         content = File.read(podfile_path)
         for pod in pods
-          content = content.gsub(/^[\t ]*pod/, '#####pod')
-          content = content.gsub(/^[\t ]*#[\t ]*pod/, 'pod')
-          content = content.gsub(/^[\t ]*#####pod/, '#pod')
+          content = content.sub(/^[\t ]*pod +#{pod}/, "#####pod #{pod}")
+          content = content.sub(/^[\t ]*#[\t ]*pod +#{pod}/, "pod #{pod}")
+          content = content.sub(/^#####pod +#{pod}/, "#pod #{pod}")
         end
 
         File.open(podfile_path, 'w') do |f|

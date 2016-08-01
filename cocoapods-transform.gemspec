@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = CocoapodsTransform::VERSION
   spec.authors       = ['张朝阳']
   spec.email         = ['zhzhy@158.com']
-  spec.description   = %q{A short description of cocoapods-transform.}
-  spec.summary       = %q{A longer description of cocoapods-transform.}
+  spec.description   = %q{Transform Podfile between source Code and Framework}
+  spec.summary       = %q{Transform Podfile between source Code and Framework.}
   spec.homepage      = 'https://github.com/zhzhy/cocoapods-generator'
   spec.license       = 'MIT'
 
