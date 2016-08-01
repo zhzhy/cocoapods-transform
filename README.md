@@ -8,4 +8,4 @@ A description of cocoapods-transform.
 
 ## Usage
 
-    $ pod spec transform POD_NAME
+    $ pod transform
